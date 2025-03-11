@@ -99,3 +99,26 @@ def withdraw(update, context: CallbackContext):
         reply_markup = InlineKeyboardMarkup(keyboard)
         query.answer()
         query.edit_message_text("✅ Withdrawal request submitted!", reply_markup=reply_markup)
+# Main menu
+def main_menu(update, context: CallbackContext):
+    query = update.callback_query
+    start(query.message, context)
+
+# Main function to set up the bot
+def main():
+    updater = Updater(TOKEN, use_context=True)
+    dp = updater.dispatcher
+
+    dp.add_handler(CommandHandler("start", start))
+    dp.add_handler(CallbackQueryHandler(show_balance, pattern="balance"))
+    dp.add_handler(CallbackQueryHandler(referral_link, pattern="referral"))
+    dp.add_handler(CallbackQueryHandler(task_menu, pattern="tasks"))
+    dp.add_handler(CallbackQueryHandler(task2, pattern="task2"))
+    dp.add_handler(CallbackQueryHandler(withdraw, pattern="withdraw"))
+    dp.add_handler(CallbackQueryHandler(main_menu, pattern="menu"))
+
+    updater.start_polling()
+    updater.idle()
+
+if name == "main":
+    main()
